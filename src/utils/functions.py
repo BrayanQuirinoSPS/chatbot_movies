@@ -36,3 +36,22 @@ def print_movies(movies):
     for movie in movies:
         message+= f'Título: {movie["Titulo"]}\nDuración: {movie["Duracion"]}\nGenero: {movie["Genero"]}\nIdiomas disponibles: {movie["Idiomas disponibles"]}\nIdioma original: {movie["Idioma original"]}:{movie['Idioma original']}:\nVotos: {movie["Votos"]}\nCalificación: {movie["Calificion"]}\nFecha: {movie["Fecha"]}\nAdultos: {movie["Adultos"]}\nSinopsis: {movie["Sinopsis"]}\n'
     return message
+
+def crear_mensajes(movies):
+    mensaje='Películas:\n'
+    line=''
+    mensajes=[]
+    for movie in movies:
+        line=f'Título: {movie["Titulo"]}\nDuración: {movie["Duracion"]}\nGenero: {movie["Genero"]}\nIdiomas disponibles: {movie["Idiomas disponibles"]}\nIdioma original: {movie["Idioma original"]}:{movie['Idioma original']}:\nVotos: {movie["Votos"]}\nCalificación: {movie["Calificion"]}\nFecha: {movie["Fecha"]}\nAdultos: {movie["Adultos"]}\nSinopsis: {movie["Sinopsis"]}\n'
+        if acortador(mensaje,line):
+            mensajes.append(mensaje)
+            mensaje=''
+        mensaje+=line
+        #print(mensajes)
+    mensajes.append(mensaje)
+    return mensajes
+
+def acortador(ori,suma):
+    if len(ori+suma)>=2999:
+        return True
+    return False

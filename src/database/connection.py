@@ -16,5 +16,20 @@ class Connection:
         search_param['query']['match']['overview']=overview
         #print(search_param)
         return self.elastic_client.search(index=self.CHATBOT_MOVIES, body=search_param)['hits']['hits']
+
+    def get_movie_by_score(score):
+        search_param=queries.GET_MOVIE_BY_SCORE
+        search_param['query']['range']['vote-average']['gte']=score
+        return self.elastic_client.search(index=self.CHATBOT_MOVIES, body=search_param)['hits']['hits']
+
+    def get_movie_by_runtime(runtime):
+        search_param=queries.GET_MOVIE_BY_RUNTIME
+        search_param['query']['range']['runtime']['gte']=runtime
+        return self.elastic_client.search(index=self.CHATBOT_MOVIES, body=search_param)['hits']['hits']
+
+    def get_recommendation():
+        search_param=queries.GET_RECOMMENDATION
+        return self.elastic_client.search(index=self.CHATBOT_MOVIES, body=search_param)['hits']['hits']
+
     def close_connection():
         self.elastic_client.close()

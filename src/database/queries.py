@@ -28,3 +28,52 @@ GET_MOVIE_BY_OVERVIEW={
     ], 
     "size": 10000
 }
+GET_MOVIE_BY_SCORE={
+    "query": {
+        "range": {
+          "vote_average": {
+            "gte": 0
+            }
+        }
+    },
+    "sort": [
+      {
+        "vote_average": {
+          "order": "desc"
+        }
+      }
+    ], 
+    "size": 10000
+}
+GET_MOVIE_BY_RUNTIME={
+    "query": {
+        "range": {
+          "runtime": {
+            "gte": 0
+            }
+        }
+    },
+    "sort": [
+      {
+        "runtime": {
+          "order": "desc"
+        }
+      }
+    ], 
+    "size": 10000
+}
+GET_RECOMMENDATION={
+  "query": {
+    "function_score": {
+      "query": {
+        "match_all": {}
+      },
+      "functions": [
+        {
+          "random_score": {}
+        }
+      ]
+    }
+  },
+  "size": 1
+}
