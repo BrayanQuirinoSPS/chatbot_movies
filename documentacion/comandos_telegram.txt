@@ -1,0 +1,11 @@
+moviebyname - <title> Search a movie by name. 
+peliculapornombre - <titulo> Busca una película por su nombre. 
+moviebyoverview - <overview> Search a movie by overview. 
+peliculaporsinopsis - <sinopsis> Busca una película por sinopsis 
+moviebyscore - <score> Search a movie by score. 
+peliculaporcalificacion - <calificacion> Busca una película por la calificación. 
+moviebyruntime - <runtime-on-minutes> Search a movie by runtime.
+peliculaporduracion - <duracion-en-minutos> Busca una película por duración. 
+recommendation - Give you a random movie. 
+recomendacion - Te da una recomendación aleatoria. 
+keyboard - Show a kerboard with options. Muestra el teclado con opciones. 
