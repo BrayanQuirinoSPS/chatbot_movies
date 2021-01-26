@@ -32,7 +32,7 @@ GET_MOVIE_BY_SCORE={
     "query": {
         "range": {
           "vote_average": {
-            "gte": 0
+            "lte": 0
             }
         }
     },
@@ -49,7 +49,7 @@ GET_MOVIE_BY_RUNTIME={
     "query": {
         "range": {
           "runtime": {
-            "gte": 0
+            "lte": 0
             }
         }
     },

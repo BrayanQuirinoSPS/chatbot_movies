@@ -8,4 +8,5 @@ moviebyruntime - <runtime-on-minutes> Search a movie by runtime.
 peliculaporduracion - <duracion-en-minutos> Busca una película por duración. 
 recommendation - Give you a random movie. 
 recomendacion - Te da una recomendación aleatoria. 
-keyboard - Show a kerboard with options. Muestra el teclado con opciones. 
+keyboard - Show a kerboard with options. Muestra el teclado con opciones.
+more - Show more movies. Muestra más resultados. 

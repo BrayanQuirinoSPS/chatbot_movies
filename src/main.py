@@ -1,13 +1,16 @@
-from database import Connection
+from database.connection import Connection
 from utils import functions
 from utils import constants
-from utils.keyboards import get_main_keyboard,get_clear_keyboard
+from utils.kerboards import get_main_keyboard,get_clear_keyboard
 
+import config
 import telebot
+import math
 
 bot = telebot.TeleBot(config.API_TOKEN) 
 iteration=0
 it=0
+consulta=[]
 
 def iterations(hits):
     global iteration
@@ -44,194 +47,263 @@ def send_welcome(message):
 def send_help(message):
     bot.send_message(message.chat.id, constants.HELP,parse_mode='MARKDOWN')
 
+@bot.message_handler(commands=['more'])
+def send_more(message):
+    global it
+    global iteration
+    global consulta
+    try:
+        con= Connection()
+        if consulta:
+            mensajes=functions.crear_mensajes(more_res(consulta))
+            if it!=iteration:
+                for mensaje in mensajes:
+                    bot.send_message(message.chat.id,mensaje)
+            else:
+                bot.send_message(message.chat.id,'Parece que no hay más resultados. :(')
+        else:
+            bot.send_message(message.chat.id,'Parece que no hay más resultados. :(')
+        con.close_connection()
+    except Exception as e:
+        print(e)
+
 @bot.message_handler(commands=['moviebyname'])
 def send_movie_by_name(message):
-    movie=message.text[12:]
+    movie=message.text[13:]
+    global it
+    global iteration
+    global consulta
     print(movie)
     if(movie):
         try:
-            con= new Connection()
+            con= Connection()
             hits=con.get_movie_by_title(movie)
             if hits:
                 consulta=functions.consulta(hits)
                 iterations(consulta)
                 mensajes=functions.crear_mensajes(more_res(consulta))
-            if it!=iteration
-                for mensaje in mensajes:
-                    bot.send_message(message.chat.id,mensaje)
-            else:
-                bot.send_message(message.chat.id,'Parece que no hay más resultados. :(')
+                if it!=iteration:
+                    for mensaje in mensajes:
+                        bot.send_message(message.chat.id,mensaje)
+                else:
+                    bot.send_message(message.chat.id,'Parece que no hay más resultados. :(')
+            else: 
+                bot.send_message(message.chat.id,'Parece que no hay resultados. :(')
             con.close_connection()
         except Exception as e:
             print(e)
     else:
-        bot.send_message(message.chat.id,'Parece que no has escrito el titulo de la película.\nIntenta escribir /moviebyname <title>\nEjemplo "/moviebyname Slow Action"',parse_mode='MARKDOWN')
+        bot.send_message(message.chat.id,'Parece que no has escrito el título de la película.\nIntenta escribir /moviebyname <title>\nEjemplo "/moviebyname Slow Action"')
         
 
 @bot.message_handler(commands=['peliculapornombre'])
 def send_pelicula_por_nombre(message):
     movie=message.text[19:]
+    global it
+    global iteration
+    global consulta
     print(movie)
     if(movie):
         try:
-            con= new Connection()
+            con= Connection()
             hits=con.get_movie_by_title(movie)
             if hits:
                 consulta=functions.consulta(hits)
                 iterations(consulta)
                 mensajes=functions.crear_mensajes(more_res(consulta))
-            if it!=iteration
-                for mensaje in mensajes:
-                    bot.send_message(message.chat.id,mensaje)
-            else:
-                bot.send_message(message.chat.id,'Parece que no hay más resultados. :(')
+                if it!=iteration:
+                    for mensaje in mensajes:
+                        bot.send_message(message.chat.id,mensaje)
+                else:
+                    bot.send_message(message.chat.id,'Parece que no hay más resultados. :(')
+            else: 
+                bot.send_message(message.chat.id,'Parece que no hay resultados. :(')
             con.close_connection()
         except Exception as e:
             print(e)
     else:
-        bot.send_message(message.chat.id,'Parece que no has escrito el titulo de la película.\nIntenta escribir /peliculapornombre <titulo>\nEjemplo "/peliculapornombre Slow Action"',parse_mode='MARKDOWN')
+        bot.send_message(message.chat.id,'Parece que no has escrito el titulo de la película.\nIntenta escribir /peliculapornombre <titulo>\nEjemplo "/peliculapornombre Slow Action"',parse_mode='HTML')
 
 @bot.message_handler(commands=['moviebyoverview'])
 def send_movie_by_overview(message):
     overview=message.text[17:]
+    global it
+    global iteration
+    global consulta
     print(overview)
     if(overview):
         try:
-            con= new Connection()
+            con= Connection()
             hits=con.get_movie_by_overview(overview)
+            #print(hits)
             if hits:
                 consulta=functions.consulta(hits)
+                #print(consulta)
                 iterations(consulta)
                 mensajes=functions.crear_mensajes(more_res(consulta))
-            if it!=iteration
-                for mensaje in mensajes:
-                    bot.send_message(message.chat.id,mensaje)
-            else:
-                bot.send_message(message.chat.id,'Parece que no hay más resultados. :(')
+                if it!=iteration:
+                    for mensaje in mensajes:
+                        bot.send_message(message.chat.id,mensaje)
+                else:
+                    bot.send_message(message.chat.id,'Parece que no hay más resultados. :(')
+            else: 
+                bot.send_message(message.chat.id,'Parece que no hay resultados. :(')
             con.close_connection()
         except Exception as e:
             print(e)
     else:
-        bot.send_message(message.chat.id,'Parece que no has escrito el resumen de la película.\nIntenta escribir /moviebyoverview <overview>\nEjemplo "/moviebyoverview The extraordinary story"',parse_mode='MARKDOWN')
+        bot.send_message(message.chat.id,'Parece que no has escrito el resumen de la película.\nIntenta escribir /moviebyoverview <overview>\nEjemplo "/moviebyoverview The extraordinary story"')
 @bot.message_handler(commands=['peliculaporsinopsis'])
 def send_pelicula_por_sinopsis(message):
     overview=message.text[21:]
+    global it
+    global iteration
+    global consulta
     print(overview)
     if(overview):
         try:
-            con= new Connection()
+            con= Connection()
             hits=con.get_movie_by_overview(overview)
             if hits:
                 consulta=functions.consulta(hits)
                 iterations(consulta)
                 mensajes=functions.crear_mensajes(more_res(consulta))
-            if it!=iteration
-                for mensaje in mensajes:
-                    bot.send_message(message.chat.id,mensaje)
-            else:
-                bot.send_message(message.chat.id,'Parece que no hay más resultados. :(')
+                if it!=iteration:
+                    for mensaje in mensajes:
+                        bot.send_message(message.chat.id,mensaje)
+                else:
+                    bot.send_message(message.chat.id,'Parece que no hay más resultados. :(')
+            else: 
+                bot.send_message(message.chat.id,'Parece que no hay resultados. :(')
             con.close_connection()
         except Exception as e:
             print(e)
     else:
-        bot.send_message(message.chat.id,'Parece que no has escrito el resumen de la película.\nIntenta escribir /peliculaporsinopsis <sinopsis>\nEjemplo "/peliculaporsinopsis The extraordinary story"',parse_mode='MARKDOWN')
+        bot.send_message(message.chat.id,'Parece que no has escrito el resumen de la película.\nIntenta escribir /peliculaporsinopsis <sinopsis>\nEjemplo "/peliculaporsinopsis The extraordinary story"')
 
 @bot.message_handler(commands=['moviebyscore'])
 def send_movie_by_score(message):
-    score=float(message.text[14:])
-    print(score)
-    if(score):
+    sco=message.text[14:]
+    global it
+    global iteration
+    global consulta
+    #print(score)
+    if(sco):
+        score=float(sco)
         try:
-            con= new Connection()
+            con= Connection()
             hits=con.get_movie_by_score(score)
+            #print(hits[0])
             if hits:
                 consulta=functions.consulta(hits)
+                #print(consulta)
                 iterations(consulta)
                 mensajes=functions.crear_mensajes(more_res(consulta))
-            if it!=iteration
-                for mensaje in mensajes:
-                    bot.send_message(message.chat.id,mensaje)
-            else:
-                bot.send_message(message.chat.id,'Parece que no hay más resultados. :(')
+                if it!=iteration:
+                    for mensaje in mensajes:
+                        bot.send_message(message.chat.id,mensaje)
+                else:
+                    bot.send_message(message.chat.id,'Parece que no hay más resultados. :(')
+            else: 
+                bot.send_message(message.chat.id,'Parece que no hay resultados. :(')
             con.close_connection()
         except Exception as e:
             print(e)
     else:
-        bot.send_message(message.chat.id,'Parece que no has escrito la calificación de la película.\nIntenta escribir /moviebyscore <score>\nEjemplo "/moviebyscore 7.9"',parse_mode='MARKDOWN')
+        bot.send_message(message.chat.id,'Parece que no has escrito la calificación de la película.\nIntenta escribir /moviebyscore <score>\nEjemplo "/moviebyscore 7.9"')
 
 @bot.message_handler(commands=['peliculaporcalificacion'])
 def send_pelicula_por_calificacion(message):
-    score=float(message.text[25:])
-    print(score)
-    if(score):
+    sco=message.text[25:]
+    global it
+    global iteration
+    global consulta
+    #print(score)
+    if(sco):
+        score=float(sco)
         try:
-            con= new Connection()
+            con= Connection()
             hits=con.get_movie_by_score(score)
             if hits:
                 consulta=functions.consulta(hits)
                 iterations(consulta)
                 mensajes=functions.crear_mensajes(more_res(consulta))
-            if it!=iteration
-                for mensaje in mensajes:
-                    bot.send_message(message.chat.id,mensaje)
-            else:
-                bot.send_message(message.chat.id,'Parece que no hay más resultados. :(')
+                if it!=iteration:
+                    for mensaje in mensajes:
+                        bot.send_message(message.chat.id,mensaje)
+                else:
+                    bot.send_message(message.chat.id,'Parece que no hay más resultados. :(')
+            else: 
+                bot.send_message(message.chat.id,'Parece que no hay resultados. :(')
             con.close_connection()
         except Exception as e:
             print(e)
     else:
-        bot.send_message(message.chat.id,'Parece que no has escrito la calificación de la película.\nIntenta escribir /peliculaporcalificacion <calificacion>\nEjemplo "/peliculaporcalificacion 7.9"',parse_mode='MARKDOWN')
+        bot.send_message(message.chat.id,'Parece que no has escrito la calificación de la película.\nIntenta escribir /peliculaporcalificacion <calificacion>\nEjemplo "/peliculaporcalificacion 7.9"')
 
 @bot.message_handler(commands=['moviebyruntime'])
 def send_movie_by_runtime(message):
-    runtime=int(message.text[16:])
-    print(runtime)
-    if(runtime):
+    runt=message.text[16:]
+    global it
+    global iteration
+    global consulta
+    #print(runtime)
+    if(runt):
+        runtime=int(runt)
         try:
-            con= new Connection()
+            con= Connection()
             hits=con.get_movie_by_runtime(runtime)
             if hits:
                 consulta=functions.consulta(hits)
                 iterations(consulta)
                 mensajes=functions.crear_mensajes(more_res(consulta))
-            if it!=iteration
-                for mensaje in mensajes:
-                    bot.send_message(message.chat.id,mensaje)
-            else:
-                bot.send_message(message.chat.id,'Parece que no hay más resultados. :(')
+                if it!=iteration:
+                    for mensaje in mensajes:
+                        bot.send_message(message.chat.id,mensaje)
+                else:
+                    bot.send_message(message.chat.id,'Parece que no hay más resultados. :(')
+            else: 
+                bot.send_message(message.chat.id,'Parece que no hay resultados. :(')
             con.close_connection()
         except Exception as e:
             print(e)
     else:
-        bot.send_message(message.chat.id,'Parece que no has escrito la duración de la película.\nIntenta escribir /moviebyruntime <runtime>\nEjemplo "/moviebyruntime 7.9"',parse_mode='MARKDOWN')
+        bot.send_message(message.chat.id,'Parece que no has escrito la duración de la película.\nIntenta escribir /moviebyruntime <runtime>\nEjemplo "/moviebyruntime 86"')
 
 @bot.message_handler(commands=['peliculaporduracion'])
 def send_pelicula_por_duracion(message):
-    runtime=int(message.text[21:])
-    print(runtime)
-    if(runtime):
+    runt=message.text[21:]
+    global it
+    global iteration
+    global consulta
+    #print(runtime)
+    if(runt):
+        runtime=int(runt)
         try:
-            con= new Connection()
+            con= Connection()
             hits=con.get_movie_by_runtime(runtime)
             if hits:
                 consulta=functions.consulta(hits)
                 iterations(consulta)
                 mensajes=functions.crear_mensajes(more_res(consulta))
-            if it!=iteration
-                for mensaje in mensajes:
-                    bot.send_message(message.chat.id,mensaje)
-            else:
-                bot.send_message(message.chat.id,'Parece que no hay más resultados. :(')
+                if it!=iteration:
+                    for mensaje in mensajes:
+                        bot.send_message(message.chat.id,mensaje)
+                else:
+                    bot.send_message(message.chat.id,'Parece que no hay más resultados. :(')
+            else: 
+                bot.send_message(message.chat.id,'Parece que no hay resultados. :(')
             con.close_connection()
         except Exception as e:
             print(e)
     else:
-        bot.send_message(message.chat.id,'Parece que no has escrito la duración de la película.\nIntenta escribir /peliculaporduracion <duracion>\nEjemplo "/peliculaporduracion 7.9"',parse_mode='MARKDOWN')
+        bot.send_message(message.chat.id,'Parece que no has escrito la duración de la película.\nIntenta escribir /peliculaporduracion <duracion>\nEjemplo "/peliculaporduracion 86"')
 
 @bot.message_handler(commands=['recomendacion','recommendation'])
 def send_simplenote(message):
+    global consulta
     try:
-        con= new Connection()
+        con= Connection()
         hits=con.get_recommendation()
         if hits:
             consulta=functions.consulta(hits)
@@ -252,8 +324,9 @@ def handle_keyboard(message):
 @bot.message_handler(func=lambda message: True)
 def send_response(message):
     text = message.text
-    if text == "recomendacion" or text='recommendation':
-        con= new Connection()
+    global consulta
+    if text == "recomendacion" or text=='recommendation':
+        con= Connection()
         hits=con.get_recommendation()
         if hits:
             consulta=functions.consulta(hits)
