@@ -1,3 +1,4 @@
+#Archivo de las queries como DICS
 GET_MOVIE_BY_TITLE= {
     "query": {
         "match": {

@@ -1,0 +1,147 @@
+GET chatbot_movies/_search
+{
+  "query": {
+    "match_all": {}
+  }
+}
+
+GET chatbot_movies/_search
+{
+    "query": {
+        "match": {
+            "overview": "Home"
+        }
+    },
+    "sort": [
+      {
+        "runtime": {
+          "order": "desc"
+        }
+      }
+    ], 
+    "size": 10000
+}
+
+GET chatbot_movies/_search
+  {
+    "query": {
+      "range": {
+        "vote_average": {
+          "lte": 6.8
+        }
+      }
+    },
+    "sort": [
+      {
+        "vote_average": {
+          "order": "desc"
+        }
+      }
+    ],
+    "aggs": {
+      "count": {
+        "value_count": {
+          "vote_average": "6.8"
+        }
+      }
+    }
+  }
+
+DELETE chatbot_movies
+
+GET chatbot_movies/_search
+{
+  "query": {
+    "bool": {
+      "must_not": {
+        "exists": {
+          "field": "release_date"
+        }
+      }
+    }
+  }
+}
+POST chatbot_movies/_update_by_query
+{
+  "script": {
+    "source": "ctx._source.runtime=params.runtime",
+    "lang": "painless",
+    "params": {
+      "runtime": 0
+    }
+  },
+  "query": {
+    "bool": {
+      "must_not": {
+        "exists": {
+          "field": "runtime"
+        }
+      }
+    }
+  }
+}
+
+POST chatbot_movies/_update_by_query
+{
+  "script": {
+    "source": "ctx._source.spoken_languages=params.spoken_languages",
+    "lang": "painless",
+    "params": {
+      "spoken_languages" : "[{'iso_639_1': 'az', 'name': 'Azeri'}, {'iso_639_1': 'fa', 'name': 'Farsi'}]"
+    }
+  },
+  "query":{
+    "term":{
+      "spoken_languages.keyword":"[{'iso_639_1': 'az', 'name': Azeri'}, {'iso_639_1': 'fa', 'name': 'Farsi'}]"
+    }
+  }
+}
+
+GET chatbot_movies/_search
+{
+  "query": {
+    "regexp": {
+      "spoken_languages.keyword": ".*'ta', 'Tamil'.*"
+    }
+  }
+}
+
+POST chatbot_movies/_update_by_query
+{
+  "script": {
+    "source": "ctx._source.spoken_languages=params.spoken_languages",
+    "lang": "painless",
+    "params": {
+      "spoken_languages" : "[{'iso_639_1': 'ta', 'name':'Tamil'}]"
+    }
+  },
+  "query":{
+    "regexp":{
+      "spoken_languages.keyword":".*'ta', 'Tamil'.*"
+    }
+  }
+}
+
+PUT chatbot_movies
+{
+  "settings": {
+    "analysis": {
+      "analyzer": {
+        "my_analyzer": {
+          "tokenizer": "standard",
+          "char_filter": [
+            "my_char_filter"
+          ]
+        }
+      },
+      "char_filter": {
+        "my_char_filter": {
+          "type": "pattern_replace",
+          "pattern": "'name': Urdu'",
+          "replacement": "'name': 'Urdu'"
+        }
+      }
+    }
+  }
+}
+

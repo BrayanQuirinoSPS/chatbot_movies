@@ -1,9 +1,7 @@
 import ast
 import math
 
-en=u'\xF0\x9F\x87\xBA\xF0\x9F\x87\xB8'
-es=u'\xF0\x9F\x87\xAA\xF0\x9F\x87\xB8'   
-
+#Consulta enriquece los datos y cambia nombre de keys
 def consulta(hits):
     cons=[]
     aux_dic={}
@@ -24,6 +22,7 @@ def consulta(hits):
         cons.append(aux_dic)
     return cons
 
+#Une una lista en un string
 def get_row(dics):
     #print(dics)
     lista=[]
@@ -39,12 +38,7 @@ def get_adults(adult):
 def print_movies(movies):
     message=''
     for movie in movies:
-        flag=movie['Idioma original']
-        if(movie['Idioma original']=='es'):
-            flag=es
-        if(movie['Idioma original']=='en'):
-            flag=en
-        message+= f'Título: {movie["Titulo"]}\nDuración: {movie["Duracion"]}\nGenero: {movie["Genero"]}\nIdiomas disponibles: {movie["Idiomas disponibles"]}\nIdioma original: {movie["Idioma original"]} {flag}\nVotos: {movie["Votos"]}\nCalificación: {movie["Calificacion"]}\nFecha: {movie["Fecha"]}\nAdultos: {movie["Adultos"]}\nSinopsis: {movie["Sinopsis"]}\n\n'
+        message+= f'Título: {movie["Titulo"]}\nDuración: {movie["Duracion"]}\nGenero: {movie["Genero"]}\nIdiomas disponibles: {movie["Idiomas disponibles"]}\nIdioma original: {movie["Idioma original"]}\nVotos: {movie["Votos"]}\nCalificación: {movie["Calificacion"]}\nFecha: {movie["Fecha"]}\nAdultos: {movie["Adultos"]}\nSinopsis: {movie["Sinopsis"]}\n\n'
     return message
 
 def crear_mensajes(movies):
@@ -60,7 +54,7 @@ def crear_mensajes(movies):
         #print(mensajes)
     mensajes.append(mensaje)
     return mensajes
-
+#Funcion que corta los mensajes si sobrepasa los 2999 bytes
 def acortador(ori,suma):
     if len(ori+suma)>=2999:
         return True

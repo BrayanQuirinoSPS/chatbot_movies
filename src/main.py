@@ -8,6 +8,8 @@ import telebot
 import math
 
 bot = telebot.TeleBot(config.API_TOKEN) 
+
+#Iteracion, it y consulta sirven para mostrar los isguientes resultados mediante el comando /more. Keep the query alive.
 iteration=0
 it=0
 consulta=[]

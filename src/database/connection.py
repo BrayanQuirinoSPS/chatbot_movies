@@ -3,6 +3,7 @@ import json
 import requests
 from . import queries
 
+#Clase que se conecta a chatbot_movies con métodos solo de consulta
 class Connection:
     def __init__(self):
         self.CHATBOT_MOVIES='chatbot_movies'
@@ -31,6 +32,6 @@ class Connection:
     def get_recommendation(self):
         search_param=queries.GET_RECOMMENDATION
         return self.elastic_client.search(index=self.CHATBOT_MOVIES, body=search_param)['hits']['hits']
-
+    #IMPORTANTE CERRAR CONECXION
     def close_connection(self):
         self.elastic_client.close()
