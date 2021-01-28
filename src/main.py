@@ -341,5 +341,9 @@ def send_response(message):
     else:
         bot.reply_to(message,"No entiendo tu mensaje. Escribe: /help para obtener ayuda")
 
-
-bot.polling()
+while True:
+    try:
+        bot.polling()
+    except:
+        print('Error al conectarse con la API de telegram')
+        
